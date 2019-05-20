@@ -1,3 +1,5 @@
+import java.util.concurrent.TimeUnit;
+
 public class MainClass {
 
     /**
@@ -13,7 +15,7 @@ public class MainClass {
 
 
         //Create an array of large size (a million items).
-        for (int i = 0; i < 1000000; i++) {
+        for (int i = 0; i < 10000; i++) {
             int a;
 
             do {
@@ -54,11 +56,14 @@ public class MainClass {
     }
 
     public static void startTime(){
-        startTime = System.currentTimeMillis();
+        startTime = System.nanoTime();
+        TimeUnit.NANOSECONDS.toMillis(startTime);
     }
 
     public static void getTime(long startTime){
-        getTime = System.currentTimeMillis() - startTime;
+        getTime = System.nanoTime();
+        TimeUnit.NANOSECONDS.toMillis(getTime);
+        getTime = getTime - startTime;
         System.out.println("Lead time: " + getTime);
     }
 }
