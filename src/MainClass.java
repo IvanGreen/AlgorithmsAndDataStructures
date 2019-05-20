@@ -13,7 +13,7 @@ public class MainClass {
 
 
         //Create an array of large size (a million items).
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1000000; i++) {
             int a;
 
             do {
