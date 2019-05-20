@@ -14,7 +14,7 @@ public class MainClass {
         Array<Integer> array = new ArrayImpl<>();
 
 
-        //Create an array of large size (a million items).
+        //Create an array of large size
         for (int i = 0; i < 10000; i++) {
             int a;
 
