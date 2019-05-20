@@ -9,7 +9,7 @@ public class MainClass {
 
     public static void main(String[] args) {
 
-        Array<Integer> array = new SortedArrayImpl<>();
+        Array<Integer> array = new ArrayImpl<>();
 
 
         //Create an array of large size (a million items).
