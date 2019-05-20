@@ -1,5 +1,9 @@
 public class MainClass {
 
+    /**
+     * Doing homework number 2
+     */
+
     public static long startTime;
     public static long getTime;
 
