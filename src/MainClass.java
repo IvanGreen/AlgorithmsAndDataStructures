@@ -12,6 +12,8 @@ public class MainClass {
     public static void main(String[] args) {
 
         Array<Integer> array = new ArrayImpl<>();
+        Array<Integer> arraySecond;
+        Array<Integer> arrayThird;
 
 
         //Create an array of large size
@@ -19,13 +21,18 @@ public class MainClass {
             int a;
 
             do {
-                a = (int) (Math.random()*100);
-            }while (a == 5 || a == 15);
+                a = (int) (Math.random() * 100);
+            } while (a == 5 || a == 15);
 
             array.add(a);
         }
 
+        arraySecond = array;
+        arrayThird = array;
+
         System.out.println("Original: " + array);
+        System.out.println("Second: " + arraySecond);
+        System.out.println("Third: " + arrayThird);
 
         //Write methods for removing, adding, searching for an element of an array.
 
@@ -46,12 +53,12 @@ public class MainClass {
 
         startTime();
         array.sortInsert();
-        System.out.println("Sort Insert: " + array);
+        System.out.println("Sort Insert: " + arraySecond);
         getTime(startTime);
 
         startTime();
         array.sortSelect();
-        System.out.println("Sort Select: " + array);
+        System.out.println("Sort Select: " + arrayThird);
         getTime(startTime);
     }
 
