@@ -1,4 +1,9 @@
-import java.util.concurrent.TimeUnit;
+import com.sun.corba.se.impl.orbutil.threadpool.TimeoutException;
+
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.*;
+import java.util.function.Supplier;
 
 public class MainClass {
 
@@ -6,71 +11,63 @@ public class MainClass {
      * Doing homework number 2
      */
 
-    public static long startTime;
-    public static long getTime;
+    private static final int ARRAY_CAPACITY = 1000000;
 
-    public static void main(String[] args) {
+    public static final int MAX_VALUE = 10000;
 
-        Array<Integer> array = new ArrayImpl<>();
-        Array<Integer> arraySecond;
-        Array<Integer> arrayThird;
+    public static void main(String[] args) throws InterruptedException, TimeoutException, ExecutionException {
 
+        Supplier<Array> constructor = ArrayImpl::new;
 
-        //Create an array of large size
-        for (int i = 0; i < 10000; i++) {
-            int a;
+        Array arr1 = createArray(constructor);
+        Array arr2 = createArray(constructor);
+        Array arr3 = createArray(constructor);
 
-            do {
-                a = (int) (Math.random() * 100);
-            } while (a == 5 || a == 15);
+        randomInitialize(arr1,arr2,arr3);
 
-            array.add(a);
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
+
+         List<Runnable> tasks = List.of(
+            measureTime(arr1::sortBubble,"Sort Bubble"),
+            measureTime(arr2::sortSelect,"Sort Select"),
+            measureTime(arr3::sortInsert,"Sort Insert")
+        );
+
+        for(Runnable task : tasks){
+            executorService.execute(task);
         }
 
-        arraySecond = array;
-        arrayThird = array;
+        executorService.shutdown();
+        executorService.awaitTermination(1,TimeUnit.MINUTES);
 
-        System.out.println("Original: " + array);
-        System.out.println("Second: " + arraySecond);
-        System.out.println("Third: " + arrayThird);
-
-        //Write methods for removing, adding, searching for an element of an array.
-
-        array.add(5);
-        array.add(15);
-        System.out.println("Add 5 & 15: " + array);
-
-        array.remove(5);
-        System.out.println("Search & remove 5: " + array);
-
-
-        //Write methods that implement the considered types of sorts, and check the speed of each.
-
-        startTime();
-        array.sortBubble();
-        System.out.println("Sort Bubble: " + array);
-        getTime(startTime);
-
-        startTime();
-        array.sortInsert();
-        System.out.println("Sort Insert: " + arraySecond);
-        getTime(startTime);
-
-        startTime();
-        array.sortSelect();
-        System.out.println("Sort Select: " + arrayThird);
-        getTime(startTime);
     }
 
-    public static void startTime(){
-        startTime = System.nanoTime();
-        TimeUnit.NANOSECONDS.toMillis(startTime);
+    private static void randomInitialize(Array... arrays) {
+        Random random = new Random();
+
+        for (int i = 0; i < ARRAY_CAPACITY; i++) {
+            int value = random.nextInt(MAX_VALUE);
+            for(Array array : arrays){
+                array.add(value);
+            }
+
+        }
     }
 
-    public static void getTime(long startTime){
-        getTime = System.nanoTime();
-        TimeUnit.NANOSECONDS.toMillis(getTime);
-        getTime = getTime - startTime;
-        System.out.println("Lead time: " + getTime);
+    private static Runnable measureTime(Runnable action, String actionName){
+        return () -> {
+            long startTime = System.nanoTime();
+            action.run();
+            long finishTime = System.nanoTime();
+            long duration = finishTime - startTime;
+
+            System.out.println(String.format("%s took time: %d ms.",
+                    actionName,
+                    TimeUnit.NANOSECONDS.toMillis(duration)));
+        };
+    }
+
+    private static Array createArray(Supplier<Array> factory) {
+        return  factory.get();
     }
 }
