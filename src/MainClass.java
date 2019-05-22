@@ -1,5 +1,6 @@
 import com.sun.corba.se.impl.orbutil.threadpool.TimeoutException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.*;
@@ -8,10 +9,14 @@ import java.util.function.Supplier;
 public class MainClass {
 
     /**
-     * Doing homework number 2
+     * Doing homework number 2:
+     * 1. Create an array of large size.
+     * 2. Write methods for removing, adding, searching for an element of an array.
+     * 3. Fill the array with random numbers.
+     * 4. Write methods that implement the considered types of sorts, and check the speed of each.
      */
 
-    private static final int ARRAY_CAPACITY = 1000000;
+    private static final int ARRAY_CAPACITY = 10000;
 
     public static final int MAX_VALUE = 10000;
 
@@ -27,18 +32,34 @@ public class MainClass {
 
         ExecutorService executorService = Executors.newFixedThreadPool(3);
 
-         List<Runnable> tasks = List.of(
-            measureTime(arr1::sortBubble,"Sort Bubble"),
-            measureTime(arr2::sortSelect,"Sort Select"),
-            measureTime(arr3::sortInsert,"Sort Insert")
-        );
+        /**
+         * That's don't work on JDK 1.8.2, just on JDK 9 and upper.
+         */
+//         List<Runnable> tasks = List.of(
+//            measureTime(arr1::sortBubble,"Sort Bubble"),
+//            measureTime(arr2::sortSelect,"Sort Select"),
+//            measureTime(arr3::sortInsert,"Sort Insert")
+//        );
 
-        for(Runnable task : tasks){
-            executorService.execute(task);
+        System.out.println("Original Arr1: " + arr1);
+        System.out.println("Original Arr2: " + arr2);
+        System.out.println("Original Arr3: " + arr3 + "\n");
+
+         List tasks = new ArrayList<Runnable>();
+         tasks.add(measureTime(arr1::sortBubble,"Sort Bubble"));
+         tasks.add(measureTime(arr2::sortSelect,"Sort Select"));
+         tasks.add(measureTime(arr3::sortInsert,"Sort Insert"));
+
+        for(Object task : tasks){
+            executorService.execute((Runnable) task);
         }
 
         executorService.shutdown();
         executorService.awaitTermination(1,TimeUnit.MINUTES);
+
+        System.out.println("\nFinished Arr1: " + arr1);
+        System.out.println("Finished Arr2: " + arr2);
+        System.out.println("Finished Arr3: " + arr3);
 
     }
 
@@ -70,4 +91,5 @@ public class MainClass {
     private static Array createArray(Supplier<Array> factory) {
         return  factory.get();
     }
+
 }
