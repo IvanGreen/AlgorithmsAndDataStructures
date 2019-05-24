@@ -5,6 +5,10 @@ import Lesson3.datastructure.queue.Queue;
 import Lesson3.datastructure.stack.Stack;
 import Lesson3.datastructure.stack.StackImpl;
 
+/**
+ * Work on Lesson #3
+ */
+
 public class Main3 {
 
     public static void main(String[] args) {
