@@ -3,7 +3,7 @@ package Lesson5;
 public class HelloBye {
 
     public static void main(String[] args) {
-        hello("Pavel");
+        hello("user");
     }
 
     private static void hello(String name) {
