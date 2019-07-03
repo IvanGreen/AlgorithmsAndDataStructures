@@ -52,8 +52,6 @@ public class HashTableImpl implements HashTable {
             count++;
         }
 
-
-
         data[index] = new Entry(item, cost);
         count++;
         size++;
